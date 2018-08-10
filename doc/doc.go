@@ -33,7 +33,6 @@ func (i *Input) Value() string {
 	return "required"
 }
 
-
 // Value represents a terraform value.
 type Value struct {
 	Type    string
@@ -49,8 +48,8 @@ type Output struct {
 // Doc represents a terraform module doc.
 type Doc struct {
 	Comments map[string]string
-	Inputs  []Input
-	Outputs []Output
+	Inputs   []Input
+	Outputs  []Output
 }
 
 type inputsByName []Input
