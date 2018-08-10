@@ -6,15 +6,18 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/segmentio/terraform-docs/doc"
+	"github.com/garettmd/terraform-docs/doc"
 )
 
 // Pretty printer pretty prints a doc.
 func Pretty(d *doc.Doc) (string, error) {
 	var buf bytes.Buffer
 
-	if len(d.Comment) > 0 {
-		buf.WriteString(fmt.Sprintf("\n%s\n", d.Comment))
+	if len(d.Comments) > 0 {
+		for file, comment := range d.Comments {
+			buf.WriteString(fmt.Sprintf("\n%s:\n", file))
+			buf.WriteString(fmt.Sprintf("\n%s\n", comment))
+		}
 	}
 
 	if len(d.Inputs) > 0 {
@@ -53,8 +56,12 @@ func Pretty(d *doc.Doc) (string, error) {
 func Markdown(d *doc.Doc, printRequired bool) (string, error) {
 	var buf bytes.Buffer
 
-	if len(d.Comment) > 0 {
-		buf.WriteString(fmt.Sprintf("%s\n", d.Comment))
+	if len(d.Comments) > 0 {
+		buf.WriteString(fmt.Sprint("## Comments\n"))
+		for file, comment := range d.Comments {
+			buf.WriteString(fmt.Sprintf("\n#### %s\n", file))
+			buf.WriteString(fmt.Sprintf("\n```%s\n```\n", comment))
+		}
 	}
 
 	if len(d.Inputs) > 0 {

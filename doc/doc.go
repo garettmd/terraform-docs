@@ -33,6 +33,7 @@ func (i *Input) Value() string {
 	return "required"
 }
 
+
 // Value represents a terraform value.
 type Value struct {
 	Type    string
@@ -47,7 +48,7 @@ type Output struct {
 
 // Doc represents a terraform module doc.
 type Doc struct {
-	Comment string
+	Comments map[string]string
 	Inputs  []Input
 	Outputs []Output
 }
@@ -68,6 +69,7 @@ func (a outputsByName) Less(i, j int) bool { return a[i].Name < a[j].Name }
 // of filenames and *ast.File.
 func Create(files map[string]*ast.File) *Doc {
 	doc := new(Doc)
+	fileComments := make(map[string]string, len(files))
 
 	for name, f := range files {
 		list := f.Node.(*ast.ObjectList)
@@ -77,10 +79,13 @@ func Create(files map[string]*ast.File) *Doc {
 		filename := path.Base(name)
 		comments := f.Comments
 
-		if filename == "main.tf" && len(comments) > 0 {
-			doc.Comment = header(comments[0])
+		if len(comments) > 0 {
+			if len(header(comments[0])) > 0 {
+				fileComments[filename] = header(comments[0])
+			}
 		}
 	}
+	doc.Comments = fileComments
 	sort.Sort(inputsByName(doc.Inputs))
 	sort.Sort(outputsByName(doc.Outputs))
 	return doc

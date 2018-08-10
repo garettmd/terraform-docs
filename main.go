@@ -9,8 +9,8 @@ import (
 
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hcl/hcl/ast"
-	"github.com/segmentio/terraform-docs/doc"
-	"github.com/segmentio/terraform-docs/print"
+	"github.com/garettmd/terraform-docs/doc"
+	"github.com/garettmd/terraform-docs/print"
 	"github.com/tj/docopt"
 )
 
